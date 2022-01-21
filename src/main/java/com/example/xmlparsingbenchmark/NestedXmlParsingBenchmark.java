@@ -19,51 +19,48 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+@State(Scope.Benchmark)
 public class NestedXmlParsingBenchmark {
 
-    @State(Scope.Benchmark)
-    public static class BenchmarkState {
+    public String nested11;
+    public String nested110;
+    public String nested1100;
+    public String nested101;
+    public String nested1010;
+    public String nested10100;
+    public String nested1001;
+    public String nested10010;
+    public String nested100100;
 
-        public String nested11;
-        public String nested110;
-        public String nested1100;
-        public String nested101;
-        public String nested1010;
-        public String nested10100;
-        public String nested1001;
-        public String nested10010;
-        public String nested100100;
+    public DocumentBuilder db;
 
-        public DocumentBuilder db;
+    @Setup(Level.Trial)
+    public void doSetup() {
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            db = dbf.newDocumentBuilder();
+            XmlGenerator g = new XmlGenerator();
 
-        @Setup(Level.Trial)
-        public void doSetup() {
-            try {
-                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                db = dbf.newDocumentBuilder();
-                XmlGenerator g = new XmlGenerator();
+            nested11 = g.generateNestedXmlDocument(1, 1);
+            nested110 = g.generateNestedXmlDocument(1, 10);
+            nested1100 = g.generateNestedXmlDocument(1, 100);
+            nested101 = g.generateNestedXmlDocument(10, 1);
+            nested1010 = g.generateNestedXmlDocument(10, 10);
+            nested10100 = g.generateNestedXmlDocument(10, 100);
+            nested1001 = g.generateNestedXmlDocument(100, 1);
+            nested10010 = g.generateNestedXmlDocument(100, 10);
+            nested100100 = g.generateNestedXmlDocument(100, 100);
 
-                nested11 = g.generateNestedXmlDocument(1, 1);
-                nested110 = g.generateNestedXmlDocument(1, 10);
-                nested1100 = g.generateNestedXmlDocument(1, 100);
-                nested101 = g.generateNestedXmlDocument(10, 1);
-                nested1010 = g.generateNestedXmlDocument(10, 10);
-                nested10100 = g.generateNestedXmlDocument(10, 100);
-                nested1001 = g.generateNestedXmlDocument(100, 1);
-                nested10010 = g.generateNestedXmlDocument(100, 10);
-                nested100100 = g.generateNestedXmlDocument(100, 100);
-
-            } catch (ParserConfigurationException ex) {
-                Logger.getLogger(NestedXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            }
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(NestedXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
     }
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
-    public void testNested11(BenchmarkState state, Blackhole blackhole) {
+    public void testNested11(Blackhole blackhole) {
         try {
-            Document doc = state.db.parse(new InputSource(new StringReader(state.nested11)));
+            Document doc = db.parse(new InputSource(new StringReader(nested11)));
             blackhole.consume(doc);
         } catch (SAXException | IOException ex) {
             Logger.getLogger(NestedXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -72,9 +69,9 @@ public class NestedXmlParsingBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
-    public void testNested110(BenchmarkState state, Blackhole blackhole) {
+    public void testNested110(Blackhole blackhole) {
         try {
-            Document doc = state.db.parse(new InputSource(new StringReader(state.nested110)));
+            Document doc = db.parse(new InputSource(new StringReader(nested110)));
             blackhole.consume(doc);
         } catch (SAXException | IOException ex) {
             Logger.getLogger(NestedXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -83,43 +80,9 @@ public class NestedXmlParsingBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
-    public void testNested1100(BenchmarkState state, Blackhole blackhole) {
+    public void testNested1100(Blackhole blackhole) {
         try {
-            Document doc = state.db.parse(new InputSource(new StringReader(state.nested1100)));
-            blackhole.consume(doc);
-        } catch (SAXException | IOException ex) {
-            Logger.getLogger(NestedXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-    }
-
-    // -----
-    @Benchmark
-    @BenchmarkMode(Mode.Throughput)
-    public void testNested101(BenchmarkState state, Blackhole blackhole) {
-        try {
-            Document doc = state.db.parse(new InputSource(new StringReader(state.nested101)));
-            blackhole.consume(doc);
-        } catch (SAXException | IOException ex) {
-            Logger.getLogger(NestedXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.Throughput)
-    public void testNested1010(BenchmarkState state, Blackhole blackhole) {
-        try {
-            Document doc = state.db.parse(new InputSource(new StringReader(state.nested1010)));
-            blackhole.consume(doc);
-        } catch (SAXException | IOException ex) {
-            Logger.getLogger(NestedXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.Throughput)
-    public void testNested10100(BenchmarkState state, Blackhole blackhole) {
-        try {
-            Document doc = state.db.parse(new InputSource(new StringReader(state.nested10100)));
+            Document doc = db.parse(new InputSource(new StringReader(nested1100)));
             blackhole.consume(doc);
         } catch (SAXException | IOException ex) {
             Logger.getLogger(NestedXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -129,9 +92,9 @@ public class NestedXmlParsingBenchmark {
     // -----
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
-    public void testNested1001(BenchmarkState state, Blackhole blackhole) {
+    public void testNested101(Blackhole blackhole) {
         try {
-            Document doc = state.db.parse(new InputSource(new StringReader(state.nested1001)));
+            Document doc = db.parse(new InputSource(new StringReader(nested101)));
             blackhole.consume(doc);
         } catch (SAXException | IOException ex) {
             Logger.getLogger(NestedXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -140,9 +103,9 @@ public class NestedXmlParsingBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
-    public void testNested10010(BenchmarkState state, Blackhole blackhole) {
+    public void testNested1010(Blackhole blackhole) {
         try {
-            Document doc = state.db.parse(new InputSource(new StringReader(state.nested10010)));
+            Document doc = db.parse(new InputSource(new StringReader(nested1010)));
             blackhole.consume(doc);
         } catch (SAXException | IOException ex) {
             Logger.getLogger(NestedXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -151,9 +114,43 @@ public class NestedXmlParsingBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
-    public void testNested100100(BenchmarkState state, Blackhole blackhole) {
+    public void testNested10100(Blackhole blackhole) {
         try {
-            Document doc = state.db.parse(new InputSource(new StringReader(state.nested100100)));
+            Document doc = db.parse(new InputSource(new StringReader(nested10100)));
+            blackhole.consume(doc);
+        } catch (SAXException | IOException ex) {
+            Logger.getLogger(NestedXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+    }
+
+    // -----
+    @Benchmark
+    @BenchmarkMode(Mode.Throughput)
+    public void testNested1001(Blackhole blackhole) {
+        try {
+            Document doc = db.parse(new InputSource(new StringReader(nested1001)));
+            blackhole.consume(doc);
+        } catch (SAXException | IOException ex) {
+            Logger.getLogger(NestedXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.Throughput)
+    public void testNested10010(Blackhole blackhole) {
+        try {
+            Document doc = db.parse(new InputSource(new StringReader(nested10010)));
+            blackhole.consume(doc);
+        } catch (SAXException | IOException ex) {
+            Logger.getLogger(NestedXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.Throughput)
+    public void testNested100100(Blackhole blackhole) {
+        try {
+            Document doc = db.parse(new InputSource(new StringReader(nested100100)));
             blackhole.consume(doc);
         } catch (SAXException | IOException ex) {
             Logger.getLogger(NestedXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);

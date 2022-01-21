@@ -19,43 +19,40 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+@State(Scope.Benchmark)
 public class FlatXmlParsingBenchmark {
 
-    @State(Scope.Benchmark)
-    public static class BenchmarkState {
+    public String flat1;
+    public String flat10;
+    public String flat100;
+    public String flat1000;
+    public String flat10000;
 
-        public String flat1;
-        public String flat10;
-        public String flat100;
-        public String flat1000;
-        public String flat10000;
-        
-        public DocumentBuilder db;
+    public DocumentBuilder db;
 
-        @Setup(Level.Trial)
-        public void doSetup() {
-            try {
-                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                db = dbf.newDocumentBuilder();
-                XmlGenerator g = new XmlGenerator();
-                
-                flat1 = g.generateFlatXmlDocument(1);
-                flat10 = g.generateFlatXmlDocument(10);
-                flat100 = g.generateFlatXmlDocument(100);
-                flat1000 = g.generateFlatXmlDocument(1000);
-                flat10000 = g.generateFlatXmlDocument(10000);
-                
-            } catch (ParserConfigurationException ex) {
-                Logger.getLogger(FlatXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            }
+    @Setup(Level.Trial)
+    public void doSetup() {
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            db = dbf.newDocumentBuilder();
+            XmlGenerator g = new XmlGenerator();
+
+            flat1 = g.generateFlatXmlDocument(1);
+            flat10 = g.generateFlatXmlDocument(10);
+            flat100 = g.generateFlatXmlDocument(100);
+            flat1000 = g.generateFlatXmlDocument(1000);
+            flat10000 = g.generateFlatXmlDocument(10000);
+
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(FlatXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
     }
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
-    public void testFlat1(BenchmarkState state, Blackhole blackhole) {
+    public void testFlat1(Blackhole blackhole) {
         try {
-            Document doc = state.db.parse(new InputSource(new StringReader(state.flat1)));
+            Document doc = db.parse(new InputSource(new StringReader(flat1)));
             blackhole.consume(doc);
         } catch (SAXException | IOException ex) {
             Logger.getLogger(FlatXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -64,9 +61,9 @@ public class FlatXmlParsingBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
-    public void testFlat10(BenchmarkState state, Blackhole blackhole) {
+    public void testFlat10(Blackhole blackhole) {
         try {
-            Document doc = state.db.parse(new InputSource(new StringReader(state.flat10)));
+            Document doc = db.parse(new InputSource(new StringReader(flat10)));
             blackhole.consume(doc);
         } catch (SAXException | IOException ex) {
             Logger.getLogger(FlatXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -75,9 +72,9 @@ public class FlatXmlParsingBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
-    public void testFlat100(BenchmarkState state, Blackhole blackhole) {
+    public void testFlat100(Blackhole blackhole) {
         try {
-            Document doc = state.db.parse(new InputSource(new StringReader(state.flat100)));
+            Document doc = db.parse(new InputSource(new StringReader(flat100)));
             blackhole.consume(doc);
         } catch (SAXException | IOException ex) {
             Logger.getLogger(FlatXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -86,9 +83,9 @@ public class FlatXmlParsingBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
-    public void testFlat1000(BenchmarkState state, Blackhole blackhole) {
+    public void testFlat1000(Blackhole blackhole) {
         try {
-            Document doc = state.db.parse(new InputSource(new StringReader(state.flat1000)));
+            Document doc = db.parse(new InputSource(new StringReader(flat1000)));
             blackhole.consume(doc);
         } catch (SAXException | IOException ex) {
             Logger.getLogger(FlatXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -97,9 +94,9 @@ public class FlatXmlParsingBenchmark {
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
-    public void testFlat10000(BenchmarkState state, Blackhole blackhole) {
+    public void testFlat10000(Blackhole blackhole) {
         try {
-            Document doc = state.db.parse(new InputSource(new StringReader(state.flat10000)));
+            Document doc = db.parse(new InputSource(new StringReader(flat10000)));
             blackhole.consume(doc);
         } catch (SAXException | IOException ex) {
             Logger.getLogger(FlatXmlParsingBenchmark.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
